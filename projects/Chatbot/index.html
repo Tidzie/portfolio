@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GZU Chatbot</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="Chatbot-popup">
+        <div class="chat-header">
+            <div class="chat-header-left">
+                <div class="chat-header-avatar">
+                    <img src="https://www.gzu.ac.zw/wp-content/uploads/2021/03/gzu-logo.png" alt="GZU Logo">
+                </div>
+                <div class="chat-header-info">
+                    <h2>GZU Assistant</h2>
+                    <p>Great Zimbabwe University</p>
+                </div>
+            </div>
+            <div class="chat-header-right">
+                <i class="fas fa-phone"></i>
+                <i class="fas fa-video"></i>
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
+        </div>
+        <div class="chat-body">
+            <div class="message bot-message">
+                <div class="message-content">
+                    <p>👋 Hello! I'm your GZU Assistant. I can help you with information about:</p>
+                    <ul>
+                        <li>Faculties and programs</li>
+                        <li>Campus locations</li>
+                        <li>Contact information</li>
+                        <li>General university information</li>
+                    </ul>
+                    <p>Just ask me anything!</p>
+                </div>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <div class="chat-input">
+                <i class="far fa-smile"></i>
+                <i class="fas fa-paperclip"></i>
+                <form id="chat-form">
+                    <input type="text" id="message-input" placeholder="Type a message">
+                    <button type="submit">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="knowledge.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

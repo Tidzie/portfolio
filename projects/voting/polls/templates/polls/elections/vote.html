@@ -1,0 +1,99 @@
+{% extends 'polls/base.html' %}
+
+{% block title %}Vote in {{ election.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'polls:dashboard' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'polls:election_list' %}">Elections</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'polls:election_detail' election.id %}">{{ election.title }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Vote</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Vote in {{ election.title }}</h4>
+                </div>
+                <div class="card-body">
+                    {% if election.status == 'ongoing' %}
+                        {% if not has_voted %}
+                            {% if candidates %}
+                                <p class="lead mb-4">Select a candidate to vote for in this election. Your vote is confidential and cannot be changed once submitted.</p>
+                                
+                                <form method="post" class="mb-4">
+                                    {% csrf_token %}
+                                    
+                                    <div class="list-group mb-4">
+                                        {% for candidate in candidates %}
+                                            <label class="list-group-item list-group-item-action">
+                                                <input class="form-check-input me-3" type="radio" name="candidate" value="{{ candidate.id }}" required>
+                                                <div>
+                                                    <h5 class="mb-1">{{ candidate.user.get_full_name }}</h5>
+                                                    <p class="mb-1 text-muted">{{ candidate.user.profile.get_role_display }}</p>
+                                                    
+                                                    {% if candidate.manifesto %}
+                                                        <p class="mb-1 mt-2">{{ candidate.manifesto|truncatewords:15 }}</p>
+                                                        <button class="btn btn-sm btn-outline-primary mt-2" type="button" 
+                                                                data-bs-toggle="collapse" data-bs-target="#manifesto{{ candidate.id }}" 
+                                                                aria-expanded="false" aria-controls="manifesto{{ candidate.id }}">
+                                                            Read Manifesto
+                                                        </button>
+                                                        <div class="collapse mt-2" id="manifesto{{ candidate.id }}">
+                                                            <div class="card card-body">
+                                                                {{ candidate.manifesto|linebreaks }}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                    
+                                    <div class="alert alert-warning mb-4">
+                                        <h5 class="alert-heading">Important Notice</h5>
+                                        <p>Your vote is final and cannot be changed once submitted. Please review your selection carefully before submitting.</p>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-success btn-lg">Cast My Vote</button>
+                                    </div>
+                                </form>
+                            {% else %}
+                                <div class="alert alert-info">
+                                    <h5 class="alert-heading">No Candidates Available</h5>
+                                    <p>There are no candidates registered for this election. Please check back later.</p>
+                                    <hr>
+                                    <a href="{% url 'polls:election_detail' election.id %}" class="btn btn-primary">Return to Election</a>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="alert alert-success">
+                                <h5 class="alert-heading">Vote Recorded</h5>
+                                <p>You have already voted in this election. Thank you for participating!</p>
+                                <hr>
+                                <a href="{% url 'polls:election_detail' election.id %}" class="btn btn-primary">View Election Details</a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-danger">
+                            <h5 class="alert-heading">Voting Unavailable</h5>
+                            <p>This election is not currently open for voting. Elections are only available for voting during their active period.</p>
+                            <hr>
+                            <a href="{% url 'polls:election_detail' election.id %}" class="btn btn-primary">Return to Election</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,149 @@
+{% extends 'polls/base.html' %}
+
+{% block title %}{{ election.title }} - Details{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'polls:dashboard' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'polls:election_list' %}">Elections</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ election.title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">{{ election.title }}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <span class="badge {% if election.status == 'UPCOMING' %}bg-info{% elif election.status == 'ONGOING' %}bg-success{% elif election.status == 'COMPLETED' %}bg-secondary{% endif %} mb-3">
+                            {{ election.get_status_display }}
+                        </span>
+                        <h5>Election Type: {{ election.get_election_type_display }}</h5>
+                        <p class="lead">{{ election.description }}</p>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Start Date</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h4>{{ election.start_date }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">End Date</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h4>{{ election.end_date }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if election.status == 'COMPLETED' and election.results_published %}
+                    <div class="alert alert-success mb-4">
+                        <h5 class="alert-heading">Election Results</h5>
+                        <p>This election has concluded and results are available.</p>
+                        <a href="{% url 'polls:election_results' election.id %}" class="btn btn-primary">View Results</a>
+                    </div>
+                    {% endif %}
+
+                    {% if messages %}
+                    <div class="mb-4">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0">Actions</h4>
+                </div>
+                <div class="card-body">
+                    {% if election.status == 'UPCOMING' %}
+                        {% if user.is_authenticated and not is_candidate %}
+                        <div class="d-grid gap-2 mb-3">
+                            <a href="{% url 'polls:apply_candidate' election.id %}" class="btn btn-primary">Apply as Candidate</a>
+                        </div>
+                        {% elif is_candidate %}
+                        <div class="alert alert-info">
+                            <h5 class="alert-heading">Application Status</h5>
+                            <p>Your candidate application is {{ application_status }}.</p>
+                        </div>
+                        {% endif %}
+                    {% elif election.status == 'ONGOING' %}
+                        {% if user.is_authenticated and not has_voted %}
+                        <div class="d-grid gap-2 mb-3">
+                            <a href="{% url 'polls:vote' election.id %}" class="btn btn-success">Cast Your Vote</a>
+                        </div>
+                        {% elif has_voted %}
+                        <div class="alert alert-success">
+                            <p class="mb-0">You have already cast your vote in this election.</p>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if request.user.is_staff %}
+                    <div class="border-top pt-3 mt-3">
+                        <h5>Admin Actions</h5>
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'polls:admin_election_edit' election.id %}" class="btn btn-warning mb-2">Edit Election</a>
+                            <a href="{% url 'polls:admin_candidate_list' election.id %}" class="btn btn-info mb-2">Manage Candidates</a>
+                            {% if election.status == 'COMPLETED' and not election.results_published %}
+                            <a href="{% url 'polls:publish_results' election.id %}" class="btn btn-success">Publish Results</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">Candidates</h4>
+                </div>
+                <div class="card-body">
+                    {% if candidates %}
+                        <div class="list-group">
+                            {% for candidate in candidates %}
+                            <a href="{% url 'polls:candidate_profile' election.id candidate.id %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ candidate.user.get_full_name }}</h5>
+                                    <small>ID: {{ candidate.id }}</small>
+                                </div>
+                                <p class="mb-1">{{ candidate.manifesto|truncatechars:80 }}</p>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <p class="mb-0">No candidates have applied yet or none have been approved.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

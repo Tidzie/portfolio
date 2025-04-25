@@ -1,0 +1,23 @@
+{% extends 'enrollment/base.html' %}
+
+{% block title %}Delete Parent - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2 class="mb-0">Delete Parent</h2>
+    </div>
+    <div class="card-body">
+        <p class="lead">Are you sure you want to delete the parent "{{ parent.user.get_full_name }}"?</p>
+        <p class="text-danger">This action cannot be undone. All associated children and enrollments will also be deleted.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="mt-4">
+                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                <a href="{% url 'parent_detail' parent.pk %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

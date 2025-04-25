@@ -1,0 +1,59 @@
+{% extends 'enrollment/base.html' %}
+
+{% block title %}{{ child.first_name }} {{ child.last_name }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Child Details</h2>
+        <div>
+            <a href="{% url 'child_update' child.pk %}" class="btn btn-warning">Edit</a>
+            <a href="{% url 'child_delete' child.pk %}" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Personal Information</h4>
+                <dl class="row">
+                    <dt class="col-sm-4">First Name</dt>
+                    <dd class="col-sm-8">{{ child.first_name }}</dd>
+
+                    <dt class="col-sm-4">Last Name</dt>
+                    <dd class="col-sm-8">{{ child.last_name }}</dd>
+
+                    <dt class="col-sm-4">Date of Birth</dt>
+                    <dd class="col-sm-8">{{ child.date_of_birth }}</dd>
+
+                    <dt class="col-sm-4">Parent</dt>
+                    <dd class="col-sm-8">
+                        <a href="{% url 'parent_detail' child.parent.pk %}">
+                            {{ child.parent.user.get_full_name }}
+                        </a>
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <h4>Enrollments</h4>
+                {% if child.enrollments.all %}
+                    <ul class="list-group">
+                        {% for enrollment in child.enrollments.all %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ enrollment.class_type }} - {{ enrollment.enrollment_date }}
+                                <a href="{% url 'enrollment_detail' enrollment.pk %}" class="btn btn-sm btn-info">View</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No enrollments found.</p>
+                {% endif %}
+                <a href="{% url 'enrollment_create' %}" class="btn btn-primary mt-3">Add Enrollment</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="{% url 'child_list' %}" class="btn btn-secondary">Back to Children</a>
+</div>
+{% endblock %} 

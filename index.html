@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Portfolio</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="profile-pic-container">
+                <img src="assets/Hero.JPG" alt="Talent F Mirimi" class="profile-pic">
+            </div>
+            <h1>Hi, I'm <span class="highlight">Talent F Mirimi</span></h1>
+            <p class="subtitle">Web Developer & Designer</p>
+            <p class="tagline">Transforming ideas into elegant digital solutions that make an impact</p>
+            <a href="#contact" class="cta-button">Get in Touch</a>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <h2>About Me</h2>
+        <div class="about-content">
+            <div class="profile-pic-container">
+                <div class="profile-slider">
+                    <img src="assets/profile1.JPG" alt="Talent F Mirimi" class="profile-pic">
+                    <img src="assets/profile2.JPG" alt="Talent F Mirimi" class="profile-pic">
+                    <img src="assets/profile3.jpg" alt="Talent F Mirimi" class="profile-pic">
+                </div>
+            </div>
+            <div class="about-text">
+                <p>I am a creative and detail-oriented web developer who enjoys building beautiful and functional websites. With a passion for design and problem-solving, I strive to create user-friendly experiences that make a difference. I actively participate in hackathons, where I collaborate with teams to develop innovative solutions under tight deadlines. My experience in teamwork has helped me become an effective communicator and a reliable team player. When I'm not coding, you can find me exploring new technologies and working on personal projects.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="skills">
+        <h2>My Skills</h2>
+        <div class="skills-container">
+            <div class="skill">
+                <i class="fab fa-python"></i>
+                <h3>Python</h3>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 65%"></div>
+                </div>
+                <span class="percentage">65%</span>
+            </div>
+            <div class="skill">
+                <i class="fab fa-html5"></i>
+                <h3>HTML5</h3>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 75%"></div>
+                </div>
+                <span class="percentage">75%</span>
+            </div>
+            <div class="skill">
+                <i class="fab fa-js"></i>
+                <h3>JavaScript</h3>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 60%"></div>
+                </div>
+                <span class="percentage">60%</span>
+            </div>
+            <div class="skill">
+                <i class="fas fa-code"></i>
+                <h3>Frameworks</h3>
+                <div class="frameworks">
+                    <span class="framework-tag">Django</span>
+                    <span class="framework-tag">React</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <h2>My Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <img src="assets/makoz-clothing.jpg" alt="Makoz Clothing">
+                <div class="project-title">Makoz Clothing</div>
+                <button class="click-here-btn">Click Here</button>
+                <div class="project-content hidden">
+                    <h3>Makoz Clothing</h3>
+                    <p>A modern e-commerce platform for a clothing store featuring:</p>
+                    <ul class="project-features">
+                        <li>Product catalog with categories</li>
+                        <li>Shopping cart functionality</li>
+                        <li>User authentication</li>
+                        <li>Secure payment integration</li>
+                    </ul>
+                    <div class="project-tech">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">CSS3</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Django</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="projects/Makoz Clothing/index.html" class="live-demo-btn">Live Demo</a>
+                        <a href="https://github.com/Tidzie/Makoz" class="github-btn" target="_blank">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="assets/voting.jpg" alt="Voting System">
+                <div class="project-title">Voting System</div>
+                <button class="click-here-btn">Click Here</button>
+                <div class="project-content hidden">
+                    <h3>Voting System</h3>
+                    <p>Secure online voting platform with features like:</p>
+                    <ul class="project-features">
+                        <li>Real-time vote tracking</li>
+                        <li>Voter authentication</li>
+                        <li>Results visualization</li>
+                        <li>Admin dashboard</li>
+                    </ul>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Django</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                        <span class="tech-tag">Bootstrap</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="live-demo-btn">Coming Soon</a>
+                        <a href="https://github.com/Tidzie/voting-system" class="github-btn" target="_blank">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="assets/Enrollment.png" alt="Enrollment System">
+                <div class="project-title">Enrollment System</div>
+                <button class="click-here-btn">Click Here</button>
+                <div class="project-content hidden">
+                    <h3>Enrollment System</h3>
+                    <p>Comprehensive student enrollment management system featuring:</p>
+                    <ul class="project-features">
+                        <li>Student registration</li>
+                        <li>Course management</li>
+                        <li>Grade tracking</li>
+                        <li>Academic calendar</li>
+                    </ul>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Django</span>
+                        <span class="tech-tag">MySQL</span>
+                        <span class="tech-tag">jQuery</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="live-demo-btn">Coming Soon</a>
+                        <a href="https://github.com/Tidzie/enrollment-system" class="github-btn" target="_blank">GitHub</a>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="assets/Chatbot.png" alt="GZU Chatbot">
+                <div class="project-title">GZU Chatbot</div>
+                <button class="click-here-btn">Click Here</button>
+                <div class="project-content hidden">
+                    <h3>GZU Chatbot</h3>
+                    <p>AI-powered university information chatbot with:</p>
+                    <ul class="project-features">
+                        <li>Natural language processing</li>
+                        <li>24/7 automated responses</li>
+                        <li>Course information</li>
+                        <li>Campus navigation help</li>
+                    </ul>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">TensorFlow</span>
+                        <span class="tech-tag">NLP</span>
+                        <span class="tech-tag">API Integration</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="projects/Chatbot/index.html" class="live-demo-btn">Live Demo</a>
+                        <a href="https://github.com/Tidzie/gzu-chatbot" class="github-btn" target="_blank">GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2>Contact Me</h2>
+        <div class="contact-container">
+            <div class="social-contact">
+                <div class="social-links">
+                    <a href="https://wa.me/263777413117" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://https://www.facebook.com/share/16BikZ58Pc/" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="https://https://www.linkedin.com/in/tidza-mirimi-a00bbb360/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                </div>
+                <h3>Connect With Me</h3>
+            </div>
+            <form id="contact-form">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message" required></textarea>
+                <button type="submit" class="submit-button">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Talent F Mirimi. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="project-cards.js"></script>
+</body>
+</html> 

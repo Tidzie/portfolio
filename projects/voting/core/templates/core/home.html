@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Voting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+            overflow-x: hidden;
+        }
+        .navbar {
+            background: linear-gradient(to right, #4a6cf7, #9155fd);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar h1 {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .navbar-links {
+            display: flex;
+            gap: 20px;
+        }
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 50px;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        .navbar-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        .hero {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero:before {
+            content: '';
+            position: absolute;
+            width: 140%;
+            height: 100%;
+            background: white;
+            bottom: -50%;
+            left: -20%;
+            border-radius: 50% 50% 0 0;
+        }
+        .hero-content {
+            max-width: 600px;
+            position: relative;
+            z-index: 10;
+            color: white;
+        }
+        .hero h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        .section {
+            padding: 80px 40px;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .section-title h3 {
+            font-size: 2.5rem;
+            color: #333;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title h3:after {
+            content: '';
+            position: absolute;
+            height: 3px;
+            width: 70px;
+            background: linear-gradient(to right, #4a6cf7, #9155fd);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .features-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            width: calc(50% - 15px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .feature-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #4a6cf7, #9155fd);
+        }
+        .feature-content {
+            padding: 30px;
+        }
+        .feature-card h4 {
+            color: #4a6cf7;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        .feature-card p {
+            color: #6c757d;
+        }
+        .cta-section {
+            background: linear-gradient(to right, rgba(74, 108, 247, 0.1), rgba(145, 85, 253, 0.1));
+            text-align: center;
+            padding: 100px 40px;
+            border-top: 1px dashed #4a6cf7;
+            border-bottom: 1px dashed #4a6cf7;
+        }
+        .cta-section h3 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .cta-section p {
+            color: #6c757d;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+        }
+        .btn-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #4a6cf7, #9155fd);
+            z-index: -1;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            color: white;
+        }
+        .btn-primary:hover:before {
+            transform: scale(1.1);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(74, 108, 247, 0.3);
+        }
+        .btn-secondary {
+            color: white;
+        }
+        .btn-secondary:before {
+            background: linear-gradient(to right, #6c757d, #495057);
+        }
+        .btn-secondary:hover:before {
+            transform: scale(1.1);
+        }
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 117, 125, 0.3);
+        }
+        .stats-section {
+            background: white;
+            padding: 80px 40px;
+        }
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            min-width: 200px;
+        }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #4a6cf7, #9155fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .stat-label {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+        footer {
+            background: #333;
+            color: white;
+            padding: 60px 40px 30px;
+            text-align: center;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-title {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+        .copyright {
+            margin-top: 40px;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .feature-card {
+                width: 100%;
+            }
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            .section {
+                padding: 60px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <h1>Online Voting System</h1>
+        <div class="navbar-links">
+            {% if user.is_authenticated %}
+                <a href="{% url 'core:dashboard' %}">Dashboard</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'core:register' %}">Register</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Your Voice Matters</h2>
+            <p>Participate in the democratic process with our secure, transparent, and easy-to-use online voting system.</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'core:dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+            {% else %}
+                <a href="{% url 'core:register' %}" class="btn btn-primary">Get Started</a>
+            {% endif %}
+        </div>
+    </section>
+    
+    <section class="section">
+        <div class="section-title">
+            <h3>Why Choose Our Platform</h3>
+        </div>
+        
+        <div class="features-container">
+            <div class="feature-card">
+                <div class="feature-content">
+                    <h4>Secure & Transparent</h4>
+                    <p>Your vote is encrypted and protected with advanced security measures to ensure confidentiality and integrity. Every vote is recorded immutably for complete transparency.</p>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-content">
+                    <h4>Easy to Use</h4>
+                    <p>Simple and intuitive interface designed for all users, regardless of technical expertise. Cast your vote in just a few clicks without any confusion or complications.</p>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-content">
+                    <h4>Accessible Anywhere</h4>
+                    <p>Vote from the comfort of your home or on the go, using any device with internet access. No need to travel to polling stations or wait in long lines.</p>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-content">
+                    <h4>Real-time Results</h4>
+                    <p>Get instant updates and visualizations of election results as they happen. Watch democracy in action with comprehensive analytics and reporting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Secure Voting</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Availability</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">0</span>
+                <span class="stat-label">Data Breaches</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Transparency</span>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta-section">
+        <h3>Ready to participate in the democratic process?</h3>
+        <p>Join thousands of citizens who are making their voices heard through our secure and convenient online voting platform. Every vote counts!</p>
+        
+        <div class="btn-container">
+            {% if user.is_authenticated %}
+                <a href="{% url 'core:dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary">Login to Vote</a>
+                <a href="{% url 'core:register' %}" class="btn btn-secondary">Register New Account</a>
+            {% endif %}
+        </div>
+    </section>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-title">Online Voting System</div>
+            <div class="copyright">&copy; 2025 Online Voting System. All rights reserved.</div>
+        </div>
+    </footer>
+</body>
+</html> 
