@@ -30,7 +30,7 @@ A modern, responsive portfolio website showcasing my skills, projects, and profe
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/portfolio.git
+git clone https://github.com/Tidzie/portfolio.git
 ```
 
 2. Open `index.html` in your browser or run a local server:
@@ -49,4 +49,4 @@ Feel free to reach out through the contact form on the website or connect with m
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.
