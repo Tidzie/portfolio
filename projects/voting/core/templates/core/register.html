@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - Online Voting System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 {
+            color: #2575fc;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="date"]:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(37, 117, 252, 0.2);
+        }
+        .role-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .role-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .role-option:hover {
+            background-color: #f8f9fa;
+            border-color: #ddd;
+        }
+        .role-option input {
+            margin-right: 10px;
+        }
+        .role-option .role-name {
+            font-weight: bold;
+            color: #333;
+        }
+        .role-option .age-requirement {
+            margin-left: auto;
+            font-size: 12px;
+            color: #6c757d;
+            background-color: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 50px;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: transform 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.3);
+        }
+        .messages {
+            margin-bottom: 20px;
+        }
+        .alert {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            color: #dc3545;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .helptext {
+            display: block;
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            background-color: #6c757d;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .back-link:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create Your Account</h2>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username">Username:</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                <div class="error">{{ form.username.errors }}</div>
+                {% endif %}
+                <span class="helptext">{{ form.username.help_text }}</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password1">Password:</label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                <div class="error">{{ form.password1.errors }}</div>
+                {% endif %}
+                <span class="helptext">{{ form.password1.help_text }}</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password2">Confirm Password:</label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                <div class="error">{{ form.password2.errors }}</div>
+                {% endif %}
+                <span class="helptext">{{ form.password2.help_text }}</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_date_of_birth">Date of Birth:</label>
+                {{ form.date_of_birth }}
+                {% if form.date_of_birth.errors %}
+                <div class="error">{{ form.date_of_birth.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label>Register as:</label>
+                {% if form.role.errors %}
+                <div class="error">{{ form.role.errors }}</div>
+                {% endif %}
+                <div class="role-options">
+                    <label class="role-option">
+                        <input type="radio" name="role" value="VOTER" {% if form.role.value == 'VOTER' %}checked{% endif %}>
+                        <span class="role-name">Voter</span>
+                        <span class="age-requirement">18+ years</span>
+                    </label>
+                    <label class="role-option">
+                        <input type="radio" name="role" value="CHANCELLOR" {% if form.role.value == 'CHANCELLOR' %}checked{% endif %}>
+                        <span class="role-name">Chancellor</span>
+                        <span class="age-requirement">30+ years</span>
+                    </label>
+                    <label class="role-option">
+                        <input type="radio" name="role" value="MINISTER" {% if form.role.value == 'MINISTER' %}checked{% endif %}>
+                        <span class="role-name">Minister</span>
+                        <span class="age-requirement">35+ years</span>
+                    </label>
+                    <label class="role-option">
+                        <input type="radio" name="role" value="PRESIDENT" {% if form.role.value == 'PRESIDENT' %}checked{% endif %}>
+                        <span class="role-name">President</span>
+                        <span class="age-requirement">40+ years</span>
+                    </label>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">Register</button>
+        </form>
+        <a href="{% url 'core:home' %}" class="back-link">Back to Home</a>
+    </div>
+</body>
+</html> 

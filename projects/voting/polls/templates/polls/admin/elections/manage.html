@@ -1,0 +1,225 @@
+{% extends 'polls/base.html' %}
+
+{% block title %}Manage Elections{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'polls:dashboard' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Manage Elections</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Manage Elections</h3>
+                    <a href="{% url 'polls:admin_election_create' %}" class="btn btn-light">Create New Election</a>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                    <div class="mb-4">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="statusFilter">Filter by Status</label>
+                                <select class="form-select" id="statusFilter">
+                                    <option value="all">All Elections</option>
+                                    <option value="upcoming">Upcoming</option>
+                                    <option value="ongoing">Ongoing</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="typeFilter">Filter by Type</label>
+                                <select class="form-select" id="typeFilter">
+                                    <option value="all">All Types</option>
+                                    <option value="presidential">Presidential</option>
+                                    <option value="minister">Minister</option>
+                                    <option value="chancellor">Chancellor</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="searchBox">Search</label>
+                                <input type="text" class="form-control" id="searchBox" placeholder="Search by title...">
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if elections %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Candidates</th>
+                                    <th>Votes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for election in elections %}
+                                <tr>
+                                    <td>{{ election.id }}</td>
+                                    <td>{{ election.title }}</td>
+                                    <td>{{ election.get_election_type_display }}</td>
+                                    <td>
+                                        <span class="badge {% if election.status == 'UPCOMING' %}bg-info{% elif election.status == 'ONGOING' %}bg-success{% elif election.status == 'COMPLETED' %}bg-secondary{% endif %}">
+                                            {{ election.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ election.start_date }}</td>
+                                    <td>{{ election.end_date }}</td>
+                                    <td>{{ election.candidate_count }}</td>
+                                    <td>{{ election.vote_count }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'polls:election_details' election.id %}" class="btn btn-sm btn-info">View</a>
+                                            <a href="{% url 'polls:admin_election_edit' election.id %}" class="btn btn-sm btn-warning">Edit</a>
+                                            <a href="{% url 'polls:admin_candidate_list' election.id %}" class="btn btn-sm btn-primary">Candidates</a>
+                                            {% if election.status == 'COMPLETED' and not election.results_published %}
+                                            <a href="{% url 'polls:publish_results' election.id %}" class="btn btn-sm btn-success">Publish Results</a>
+                                            {% endif %}
+                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteElectionModal{{ election.id }}">Delete</button>
+                                        </div>
+
+                                        <!-- Delete Modal -->
+                                        <div class="modal fade" id="deleteElectionModal{{ election.id }}" tabindex="-1" aria-labelledby="deleteElectionModalLabel{{ election.id }}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteElectionModalLabel{{ election.id }}">Confirm Deletion</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Are you sure you want to delete the election "{{ election.title }}"?</p>
+                                                        <p class="text-danger">This action cannot be undone and will remove all associated candidates and votes.</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <form action="{% url 'polls:admin_election_delete' election.id %}" method="post">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn btn-danger">Delete Election</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {% if is_paginated %}
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1" aria-label="First">
+                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+
+                    {% else %}
+                    <div class="alert alert-info">
+                        <p class="mb-0">No elections found. Click "Create New Election" to add one.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Simple client-side filtering
+        const statusFilter = document.getElementById('statusFilter');
+        const typeFilter = document.getElementById('typeFilter');
+        const searchBox = document.getElementById('searchBox');
+        const tableRows = document.querySelectorAll('tbody tr');
+
+        function filterTable() {
+            const statusValue = statusFilter.value.toLowerCase();
+            const typeValue = typeFilter.value.toLowerCase();
+            const searchValue = searchBox.value.toLowerCase();
+
+            tableRows.forEach(row => {
+                const statusText = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                const typeText = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const titleText = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+
+                const statusMatch = statusValue === 'all' || statusText.includes(statusValue);
+                const typeMatch = typeValue === 'all' || typeText.includes(typeValue);
+                const searchMatch = titleText.includes(searchValue);
+
+                if (statusMatch && typeMatch && searchMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        statusFilter.addEventListener('change', filterTable);
+        typeFilter.addEventListener('change', filterTable);
+        searchBox.addEventListener('input', filterTable);
+    });
+</script>
+{% endblock %} 
